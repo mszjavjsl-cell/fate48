@@ -25,6 +25,20 @@ mobile.on('console', (message) => {
 await mobile.goto('http://127.0.0.1:5173')
 await mobile.waitForLoadState('networkidle')
 await mobile.getByRole('heading', { name: '정밀 만세력' }).waitFor()
+const birthDigits = mobile.getByRole('textbox', { name: '생년월일 또는 생년월일시분 숫자' })
+if (await birthDigits.inputValue() !== '') {
+  throw new Error('Birth input is not empty on initial load.')
+}
+if (await mobile.getByRole('group', { name: '사주 원국' }).count()) {
+  throw new Error('Calculated birth results are visible on initial load.')
+}
+await mobile.getByLabel('출생지').selectOption('seoul')
+await birthDigits.fill('198604021525')
+await mobile.getByRole('radio', { name: '남성' }).check()
+await mobile.getByRole('button', { name: '만세력 계산' }).click()
+await mobile.getByText('양력 1986년 4월 2일 15시 25분', { exact: true }).waitFor()
+await mobile.getByRole('group', { name: '시주 乙未' }).waitFor()
+await mobile.getByText('-32분 05초', { exact: true }).waitFor()
 const calculationToggle = mobile.getByRole('button', { name: '계산 근거' })
 const calculationDetails = mobile.getByRole('region', { name: '계산 근거 상세' })
 if (await calculationToggle.getAttribute('aria-expanded') !== 'true') {
@@ -36,14 +50,6 @@ if (await calculationToggle.getAttribute('aria-expanded') !== 'false' || await c
 }
 await calculationToggle.click()
 await calculationDetails.waitFor({ state: 'visible' })
-const birthDigits = mobile.getByRole('textbox', { name: '생년월일 또는 생년월일시분 숫자' })
-await mobile.getByLabel('출생지').selectOption('seoul')
-await birthDigits.fill('198604021525')
-await mobile.getByRole('radio', { name: '남성' }).check()
-await mobile.getByRole('button', { name: '만세력 계산' }).click()
-await mobile.getByText('양력 1986년 4월 2일 15시 25분', { exact: true }).waitFor()
-await mobile.getByRole('group', { name: '시주 乙未' }).waitFor()
-await mobile.getByText('-32분 05초', { exact: true }).waitFor()
 
 await birthDigits.fill('19860402')
 await mobile.getByRole('button', { name: '만세력 계산' }).click()
@@ -109,5 +115,5 @@ if (consoleErrors.length > 0) {
   throw new Error(`Browser console errors: ${consoleErrors.join(' | ')}`)
 }
 
-console.log('PASS mobile=390x844 desktop=1280x900 inputs=solar+lunar+unknown-time interactions=calculation-toggle+decade+annual consoleErrors=0')
+console.log('PASS initial=empty mobile=390x844 desktop=1280x900 inputs=solar+lunar+unknown-time interactions=calculation-toggle+decade+annual consoleErrors=0')
 await browser.close()

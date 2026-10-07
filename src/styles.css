@@ -204,6 +204,20 @@ button { color: inherit; }
 .calculation-ledger .primary-row dd { color: var(--vermilion); }
 
 .fortune-column { min-width: 0; padding: 28px 0 0; overflow: hidden; }
+.fortune-empty { display: grid; place-items: center; min-height: 420px; padding: 36px 20px; }
+.empty-state { max-width: 420px; text-align: center; color: var(--muted); }
+.empty-state > span {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 16px;
+  display: grid;
+  place-items: center;
+  color: var(--jade);
+  border: 1px solid var(--line-dark);
+  font: 700 1.6rem/1 'Noto Serif KR Variable', serif;
+}
+.empty-state h2 { margin: 0; color: var(--ink); font: 700 1.28rem/1.35 'Noto Serif KR Variable', serif; }
+.empty-state p { margin: 9px 0 0; font-size: .78rem; line-height: 1.7; }
 .fortune-intro, .fortune-section, .annual-detail, .engine-note { margin-inline: 20px; }
 .fortune-intro { align-items: flex-start; flex-wrap: wrap; margin-bottom: 30px; }
 .fortune-intro h2 { font-size: clamp(1.75rem, 8vw, 2.7rem); }

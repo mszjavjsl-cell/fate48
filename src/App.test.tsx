@@ -4,9 +4,25 @@ import { describe, expect, it } from 'vitest'
 
 import App from './App'
 
+async function calculateSampleBirth(user: ReturnType<typeof userEvent.setup>) {
+  await user.type(screen.getByLabelText('생년월일 또는 생년월일시분 숫자'), '198905130715')
+  await user.click(screen.getByRole('button', { name: '만세력 계산' }))
+}
+
 describe('Manse application', () => {
-  it('shows the default birth data as a four-pillar chart', () => {
+  it('starts without preset birth data or calculated results', () => {
     render(<App />)
+
+    expect(screen.getByLabelText('생년월일 또는 생년월일시분 숫자')).toHaveValue('')
+    expect(screen.queryByRole('group', { name: '사주 원국' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('group', { name: '출생정보' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: '계산 근거' })).not.toBeInTheDocument()
+  })
+
+  it('shows entered birth data as a four-pillar chart', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await calculateSampleBirth(user)
 
     expect(screen.queryByLabelText('표준 시간대')).not.toBeInTheDocument()
     expect(screen.queryByText('대한민국 표준시 기준')).not.toBeInTheDocument()
@@ -43,6 +59,7 @@ describe('Manse application', () => {
   it('collapses and expands the calculation details', async () => {
     const user = userEvent.setup()
     render(<App />)
+    await calculateSampleBirth(user)
 
     const toggle = screen.getByRole('button', { name: '계산 근거' })
     const details = screen.getByRole('region', { name: '계산 근거 상세' })
@@ -125,6 +142,7 @@ describe('Manse application', () => {
   it('changes the annual list and detail when decade and year are clicked', async () => {
     const user = userEvent.setup()
     render(<App />)
+    await calculateSampleBirth(user)
 
     const decade = screen.getByRole('button', { name: /辛未 대운.*2007년 시작.*19세/ })
     await user.click(decade)

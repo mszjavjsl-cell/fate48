@@ -12,6 +12,8 @@ export interface PillarInfo {
   branchElement: string
   stemElementLabel: string
   branchElementLabel: string
+  stemReading: string
+  branchReading: string
   stemYinYang: string
   branchYinYang: string
   tenGod: string
@@ -114,6 +116,8 @@ export function makePillarInfo(
     branchElement,
     stemElementLabel: ELEMENT_LABELS[stemElement],
     branchElementLabel: ELEMENT_LABELS[branchElement],
+    stemReading: getPillarReading(stem.getName()),
+    branchReading: getPillarReading(branch.getName()),
     stemYinYang: stem.getYinYang() === 1 ? '양' : '음',
     branchYinYang: branch.getYinYang() === 1 ? '양' : '음',
     tenGod: stemTenGod.name,

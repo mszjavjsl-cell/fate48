@@ -33,8 +33,14 @@ describe('Manse application', () => {
     expect(within(hourPillar).getByText('정재')).toBeInTheDocument()
     expect(within(hourPillar).queryByText('관성')).not.toBeInTheDocument()
     expect(within(hourPillar).getByText('정관')).toBeInTheDocument()
-    expect(within(hourPillar).getByText('양화')).toBeInTheDocument()
-    expect(within(hourPillar).getByText('양토')).toBeInTheDocument()
+    expect(within(hourPillar).getByText('병화')).toBeInTheDocument()
+    expect(within(hourPillar).getByText('진토')).toBeInTheDocument()
+    expect(within(hourPillar).queryByText('양화')).not.toBeInTheDocument()
+    expect(within(hourPillar).getByText('丙')).toHaveAttribute('data-yin-yang', '양')
+
+    const dayPillar = within(board).getByRole('group', { name: '일주 癸酉' })
+    expect(within(dayPillar).getByText('계수')).toBeInTheDocument()
+    expect(within(dayPillar).getByText('癸')).toHaveAttribute('data-yin-yang', '음')
   })
 
   it('accepts yyyymmddhhmm digits and shows the formatted birth information', async () => {

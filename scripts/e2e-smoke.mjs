@@ -37,7 +37,17 @@ await mobile.getByRole('radio', { name: '여성' }).check()
 await mobile.getByRole('button', { name: '만세력 계산' }).click()
 await mobile.getByText('음력 1989년 4월 9일 07시 15분', { exact: true }).waitFor()
 await mobile.getByText('양력 환산 1989년 5월 13일', { exact: true }).waitFor()
-await mobile.getByRole('group', { name: '시주 丙辰' }).getByText('정재', { exact: true }).waitFor()
+const hourPillar = mobile.getByRole('group', { name: '시주 丙辰' })
+await hourPillar.getByText('정재', { exact: true }).waitFor()
+await hourPillar.getByText('병화', { exact: true }).waitFor()
+if (await hourPillar.getByText('丙', { exact: true }).getAttribute('data-yin-yang') !== '양') {
+  throw new Error('Yang pillar glyph is missing its weight marker.')
+}
+const dayPillar = mobile.getByRole('group', { name: '일주 癸酉' })
+await dayPillar.getByText('계수', { exact: true }).waitFor()
+if (await dayPillar.getByText('癸', { exact: true }).getAttribute('data-yin-yang') !== '음') {
+  throw new Error('Yin pillar glyph is missing its weight marker.')
+}
 if (await mobile.getByText('대한민국 표준시 기준', { exact: true }).count()) {
   throw new Error('The removed standard-time card is still visible.')
 }

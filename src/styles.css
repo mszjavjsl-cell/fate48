@@ -161,11 +161,13 @@ button { color: inherit; }
 .pillar-column { min-width: 0; padding: 10px 4px 12px; display: grid; place-items: center; border-left: 1px solid var(--line); }
 .pillar-column:first-child { border-left: 0; }
 .pillar-label { color: var(--muted); font-size: .68rem; }
-.relation { min-height: 24px; margin-top: 7px; display: flex; align-items: center; justify-content: center; color: var(--ink); font-size: clamp(.57rem, 2.5vw, .68rem); font-weight: 720; white-space: nowrap; }
+.relation { min-height: 24px; margin-top: 7px; display: flex; align-items: center; justify-content: center; color: var(--ink); font-size: clamp(.62rem, 2.7vw, .73rem); font-weight: 800; white-space: nowrap; }
 .element-label { margin-top: 3px; font-size: clamp(.55rem, 2.35vw, .65rem); font-weight: 740; letter-spacing: .02em; }
 .ganji { width: 100%; display: grid; place-items: center; font: 740 clamp(1.8rem, 10vw, 2.65rem)/1.12 'Noto Serif KR Variable', serif; }
 .ganji.stem { padding-top: 1px; }
 .ganji.branch { padding-top: 3px; }
+.ganji[data-yin-yang='양'] { font-weight: 850; }
+.ganji[data-yin-yang='음'] { font-weight: 430; }
 .relation-branch { margin: 5px 0 2px; }
 .hidden-stems { color: var(--muted); font-size: clamp(.53rem, 2.25vw, .66rem); white-space: nowrap; }
 [data-element='木'] { color: var(--wood); }

@@ -25,12 +25,24 @@ export function PillarBoard({ pillars }: PillarBoardProps) {
               {pillar.tenGod}
             </span>
             <span className="element-label" data-element={pillar.stemElement}>
-              {pillar.stemYinYang}{pillar.stemElementLabel}
+              {pillar.stemReading}{pillar.stemElementLabel}
             </span>
-            <strong className="ganji stem" data-element={pillar.stemElement}>{pillar.stem}</strong>
-            <strong className="ganji branch" data-element={pillar.branchElement}>{pillar.branch}</strong>
+            <strong
+              className="ganji stem"
+              data-element={pillar.stemElement}
+              data-yin-yang={pillar.stemYinYang}
+            >
+              {pillar.stem}
+            </strong>
+            <strong
+              className="ganji branch"
+              data-element={pillar.branchElement}
+              data-yin-yang={pillar.branchYinYang}
+            >
+              {pillar.branch}
+            </strong>
             <span className="element-label" data-element={pillar.branchElement}>
-              {pillar.branchYinYang}{pillar.branchElementLabel}
+              {pillar.branchReading}{pillar.branchElementLabel}
             </span>
             <span className="relation relation-branch" aria-label={`지지 십성 ${pillar.branchTenGod}`}>
               {pillar.branchTenGod}

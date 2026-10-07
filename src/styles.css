@@ -179,6 +179,23 @@ button { color: inherit; }
 [data-element='水'] { color: var(--water); }
 
 .calculation-ledger dl { margin: 0; border-top: 1px solid var(--line); }
+.calculation-ledger:not(.is-open) .section-heading.compact { margin-bottom: 0; }
+.calculation-ledger .section-heading h2 { width: 100%; }
+.calculation-toggle {
+  width: 100%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: inherit;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+.calculation-toggle:focus-visible { outline: 3px solid rgba(35,106,90,.25); outline-offset: 4px; }
+.calculation-chevron { color: var(--jade); font-family: 'Noto Sans KR Variable', sans-serif; font-size: 1.2rem; line-height: 1; transform: rotate(0deg); }
+.calculation-toggle[aria-expanded='true'] .calculation-chevron { transform: rotate(180deg); }
 .calculation-ledger dl > div { min-height: 38px; display: grid; grid-template-columns: 88px 1fr; align-items: center; border-bottom: 1px solid var(--line); }
 .calculation-ledger dt { color: var(--muted); font-size: .72rem; }
 .calculation-ledger dd { margin: 0; text-align: right; font-size: .78rem; font-weight: 620; }
@@ -276,6 +293,7 @@ button { color: inherit; }
 
 @media (prefers-reduced-motion: no-preference) {
   .calculate-button, .decade-button, .year-button { transition: color 180ms ease, background-color 180ms ease, box-shadow 180ms ease; }
+  .calculation-chevron { transition: transform 180ms ease; }
   .annual-detail { animation: detail-in 180ms ease-out; }
   @keyframes detail-in { from { opacity: .7; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 }

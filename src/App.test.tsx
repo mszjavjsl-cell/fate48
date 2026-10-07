@@ -40,6 +40,24 @@ describe('Manse application', () => {
     expect(within(dayPillar).getByText('癸', { selector: 'strong' })).toHaveAttribute('data-yin-yang', '음')
   })
 
+  it('collapses and expands the calculation details', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    const toggle = screen.getByRole('button', { name: '계산 근거' })
+    const details = screen.getByRole('region', { name: '계산 근거 상세' })
+    expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    expect(details).toBeVisible()
+
+    await user.click(toggle)
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    expect(details).not.toBeVisible()
+
+    await user.click(toggle)
+    expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    expect(details).toBeVisible()
+  })
+
   it('accepts yyyymmddhhmm digits and shows the formatted birth information', async () => {
     const user = userEvent.setup()
     render(<App />)

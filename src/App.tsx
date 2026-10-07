@@ -73,6 +73,7 @@ export default function App() {
   const [result, setResult] = useState<ManseResult>(DEFAULT_RESULT)
   const [selectedCycleIndex, setSelectedCycleIndex] = useState(DEFAULT_CYCLE_INDEX)
   const [selectedYearIndex, setSelectedYearIndex] = useState(DEFAULT_YEAR_INDEX)
+  const [isCalculationOpen, setIsCalculationOpen] = useState(true)
   const [error, setError] = useState('')
 
   const selectedCycle = result.luck.cycles[selectedCycleIndex]
@@ -112,27 +113,40 @@ export default function App() {
           {error ? <p className="error-message" role="alert">{error}</p> : null}
           <PillarBoard pillars={result.pillars} />
 
-          <section className="calculation-ledger" aria-labelledby="calculation-title">
+          <section className={`calculation-ledger${isCalculationOpen ? ' is-open' : ''}`} aria-labelledby="calculation-title">
             <div className="section-heading compact">
-              <h2 id="calculation-title">계산 근거</h2>
+              <h2 id="calculation-title">
+                <button
+                  className="calculation-toggle"
+                  type="button"
+                  aria-expanded={isCalculationOpen}
+                  aria-controls="calculation-details"
+                  onClick={() => setIsCalculationOpen((open) => !open)}
+                >
+                  <span>계산 근거</span>
+                  <span className="calculation-chevron" aria-hidden="true">⌄</span>
+                </button>
+              </h2>
             </div>
-            <dl>
-              <div><dt>음력</dt><dd>{result.lunarDate.year}년 {result.lunarDate.leap ? '윤' : ''}{result.lunarDate.month}월 {result.lunarDate.day}일</dd></div>
-              <div><dt>출생지</dt><dd>{result.input.location ? `${result.input.location.name} · ${result.input.location.longitude}°E` : '미지정'}</dd></div>
-              {result.normalizedBirth.timeKnown ? (
-                <>
-                  <div><dt>경도 보정</dt><dd>{formatLongitudeCorrection(result.normalizedBirth.longitudeCorrectionSeconds!)}</dd></div>
-                  <div><dt>보정 시각</dt><dd>{formatDateTime(result.normalizedBirth.solarLocalDateTime!)}</dd></div>
-                </>
-              ) : (
-                <div><dt>출생시각</dt><dd>미상 · 정오 기준 추정</dd></div>
-              )}
-              <div><dt>대운 방향</dt><dd>{result.luck.directionLabel}</dd></div>
-              <div><dt>기준 절기</dt><dd>{result.luck.basisTerm.name} <small>{result.luck.basisTerm.hanja}</small></dd></div>
-              <div><dt>절입 시각</dt><dd>{formatDateTime(result.luck.basisTerm.localDateTime)}</dd></div>
-              <div><dt>{result.normalizedBirth.timeKnown ? '기산 기간' : '기산 기간(추정)'}</dt><dd>{formatPeriod(result.luck.convertedPeriod)}</dd></div>
-              <div className="primary-row"><dt>{result.normalizedBirth.timeKnown ? '첫 교운' : '첫 교운(추정)'}</dt><dd>{formatDateTime(result.luck.firstTransitionLocal)}</dd></div>
-            </dl>
+            <div id="calculation-details" role="region" aria-label="계산 근거 상세" hidden={!isCalculationOpen}>
+              <dl>
+                <div><dt>음력</dt><dd>{result.lunarDate.year}년 {result.lunarDate.leap ? '윤' : ''}{result.lunarDate.month}월 {result.lunarDate.day}일</dd></div>
+                <div><dt>출생지</dt><dd>{result.input.location ? `${result.input.location.name} · ${result.input.location.longitude}°E` : '미지정'}</dd></div>
+                {result.normalizedBirth.timeKnown ? (
+                  <>
+                    <div><dt>경도 보정</dt><dd>{formatLongitudeCorrection(result.normalizedBirth.longitudeCorrectionSeconds!)}</dd></div>
+                    <div><dt>보정 시각</dt><dd>{formatDateTime(result.normalizedBirth.solarLocalDateTime!)}</dd></div>
+                  </>
+                ) : (
+                  <div><dt>출생시각</dt><dd>미상 · 정오 기준 추정</dd></div>
+                )}
+                <div><dt>대운 방향</dt><dd>{result.luck.directionLabel}</dd></div>
+                <div><dt>기준 절기</dt><dd>{result.luck.basisTerm.name} <small>{result.luck.basisTerm.hanja}</small></dd></div>
+                <div><dt>절입 시각</dt><dd>{formatDateTime(result.luck.basisTerm.localDateTime)}</dd></div>
+                <div><dt>{result.normalizedBirth.timeKnown ? '기산 기간' : '기산 기간(추정)'}</dt><dd>{formatPeriod(result.luck.convertedPeriod)}</dd></div>
+                <div className="primary-row"><dt>{result.normalizedBirth.timeKnown ? '첫 교운' : '첫 교운(추정)'}</dt><dd>{formatDateTime(result.luck.firstTransitionLocal)}</dd></div>
+              </dl>
+            </div>
           </section>
         </aside>
 

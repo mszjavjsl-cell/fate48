@@ -25,6 +25,17 @@ mobile.on('console', (message) => {
 await mobile.goto('http://127.0.0.1:5173')
 await mobile.waitForLoadState('networkidle')
 await mobile.getByRole('heading', { name: '정밀 만세력' }).waitFor()
+const calculationToggle = mobile.getByRole('button', { name: '계산 근거' })
+const calculationDetails = mobile.getByRole('region', { name: '계산 근거 상세' })
+if (await calculationToggle.getAttribute('aria-expanded') !== 'true') {
+  throw new Error('Calculation details are not expanded by default.')
+}
+await calculationToggle.click()
+if (await calculationToggle.getAttribute('aria-expanded') !== 'false' || await calculationDetails.isVisible()) {
+  throw new Error('Calculation details did not collapse.')
+}
+await calculationToggle.click()
+await calculationDetails.waitFor({ state: 'visible' })
 const birthDigits = mobile.getByRole('textbox', { name: '생년월일 또는 생년월일시분 숫자' })
 await mobile.getByLabel('출생지').selectOption('seoul')
 await birthDigits.fill('198604021525')
@@ -98,5 +109,5 @@ if (consoleErrors.length > 0) {
   throw new Error(`Browser console errors: ${consoleErrors.join(' | ')}`)
 }
 
-console.log('PASS mobile=390x844 desktop=1280x900 inputs=solar+lunar+unknown-time interactions=decade+annual consoleErrors=0')
+console.log('PASS mobile=390x844 desktop=1280x900 inputs=solar+lunar+unknown-time interactions=calculation-toggle+decade+annual consoleErrors=0')
 await browser.close()

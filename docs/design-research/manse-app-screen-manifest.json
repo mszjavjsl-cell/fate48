@@ -1,0 +1,142 @@
+{
+  "manifestVersion": "1.0",
+  "capturedAt": "2026-08-18T17:08:08+09:00/2026-08-18T17:08:15+09:00",
+  "source": "Taildrop files already received in C:/Users/jeyon/Downloads",
+  "copiedTo": "docs/design-research/assets/manse-apps",
+  "dimensions": {
+    "width": 1080,
+    "height": 2340,
+    "unit": "px"
+  },
+  "privacy": "Screens contain names and birth details. Redact before external distribution.",
+  "files": [
+    {
+      "group": "A",
+      "screen": "natal-overview",
+      "original": "temp_1787040473970.1875450054.jpeg",
+      "copy": "app-a-01-natal-overview.jpeg",
+      "bytes": 577185,
+      "sha256": "C8693669556FE60CB3368DCF149A6F6FABA0780F592554BC674102C8769B4DA8"
+    },
+    {
+      "group": "A",
+      "screen": "luck-year-timeline",
+      "original": "temp_1787040473974.1875450054.jpeg",
+      "copy": "app-a-02-luck-year-timeline.jpeg",
+      "bytes": 765946,
+      "sha256": "3319185414BADA07764247FBD514120E976A6069A845DED18D2CE17BAB95ABC3"
+    },
+    {
+      "group": "A",
+      "screen": "year-month-timeline",
+      "original": "temp_1787040473978.1875450054.jpeg",
+      "copy": "app-a-03-year-month-timeline.jpeg",
+      "bytes": 711643,
+      "sha256": "BEA5A2D08D1C503605AEA27E53E76FB3943E1DBAB6320273BE087C696AF786E9"
+    },
+    {
+      "group": "B",
+      "screen": "natal-overview",
+      "original": "temp_1787040473981.1875450054.jpeg",
+      "copy": "app-b-01-natal-overview.jpeg",
+      "bytes": 550226,
+      "sha256": "8167DD9E1D8BE10C89CA329A47B3627C323D7B83BE67BBFE4E2B7B9B13254F3C"
+    },
+    {
+      "group": "B",
+      "screen": "daily-luck-detail",
+      "original": "temp_1787040473985.1875450054.jpeg",
+      "copy": "app-b-02-daily-luck-detail.jpeg",
+      "bytes": 552845,
+      "sha256": "CC7A2E89E90EBC4772F6E32189B5523EB8F6804358BA9E61917B9AB804A476DA"
+    },
+    {
+      "group": "C",
+      "screen": "natal-relations",
+      "original": "temp_1787040473988.1875450054.jpeg",
+      "copy": "app-c-01-natal-relations.jpeg",
+      "bytes": 450497,
+      "sha256": "372FDA1C0E2656AF3486E30CC38724D8379CDFD9A0C51DED98C6BA42ABB38F02"
+    },
+    {
+      "group": "C",
+      "screen": "technical-details",
+      "original": "temp_1787040473991.1875450054.jpeg",
+      "copy": "app-c-02-technical-details.jpeg",
+      "bytes": 332631,
+      "sha256": "69022C4D42EF2B0A5DEBBD821F25410F584F6EF703BCD92B5A5CAF893A1C4B32"
+    },
+    {
+      "group": "C",
+      "screen": "luck-year-timeline",
+      "original": "temp_1787040473993.1875450054.jpeg",
+      "copy": "app-c-03-luck-year-timeline.jpeg",
+      "bytes": 503217,
+      "sha256": "60D1A477E2467D65A11C8ED36FCD6F26BA94B6FCF3088657D01E93E5C5878610"
+    },
+    {
+      "group": "C",
+      "screen": "month-day-timeline",
+      "original": "temp_1787040473996.1875450054.jpeg",
+      "copy": "app-c-04-month-day-timeline.jpeg",
+      "bytes": 511708,
+      "sha256": "DBEC4A213BCE4DE262773B42AEE72F45062F1B73D4D08354CAD9BD39A8160C58"
+    },
+    {
+      "group": "D",
+      "screen": "profile-natal-overview",
+      "original": "temp_1787040473999.1875450054.jpeg",
+      "copy": "app-d-01-profile-natal-overview.jpeg",
+      "bytes": 372832,
+      "sha256": "870BDB7260277A1298DE5C1FDAF817CE7C962185948FBEB70CEAF140D47B18AC"
+    },
+    {
+      "group": "D",
+      "screen": "stem-branch-relations",
+      "original": "temp_1787040474001.1875450054.jpeg",
+      "copy": "app-d-02-stem-branch-relations.jpeg",
+      "bytes": 382230,
+      "sha256": "3754CB6E9D7EC4DA05177B534D6F2BF76FEE3C8E62663BC593FEF0FF2CA93246"
+    },
+    {
+      "group": "D",
+      "screen": "symbolic-stars",
+      "original": "temp_1787040474002.1875450054.jpeg",
+      "copy": "app-d-03-symbolic-stars.jpeg",
+      "bytes": 320871,
+      "sha256": "A58FFD3A0B947B85D64F21E5E59E41FDF76F265C196382C1EED4B668F2DD29B9"
+    },
+    {
+      "group": "D",
+      "screen": "elements-ten-gods-chart",
+      "original": "temp_1787040474004.1875450054.jpeg",
+      "copy": "app-d-04-elements-ten-gods-chart.jpeg",
+      "bytes": 337963,
+      "sha256": "15CFCDABE6F8545A72ED83C24441710A4972E0E91EBCC7365CBF6720B64EC6AB"
+    },
+    {
+      "group": "D",
+      "screen": "elements-useful-god",
+      "original": "temp_1787040474006.1875450054.jpeg",
+      "copy": "app-d-05-elements-useful-god.jpeg",
+      "bytes": 347021,
+      "sha256": "0080BBF6D4D8BC2CE5169C292F5510F7A59B250C4B26FB2BC788C84057AB9B5D"
+    },
+    {
+      "group": "D",
+      "screen": "strength-luck-cycle",
+      "original": "temp_1787040474008.1875450054.jpeg",
+      "copy": "app-d-06-strength-luck-cycle.jpeg",
+      "bytes": 352778,
+      "sha256": "13A7F99955390F08097106BC98E76E0AD6D32E3035FFEEF7B3A9E4EE93C07435"
+    },
+    {
+      "group": "D",
+      "screen": "annual-monthly-luck",
+      "original": "temp_1787040474010.1875450054.jpeg",
+      "copy": "app-d-07-annual-monthly-luck.jpeg",
+      "bytes": 479733,
+      "sha256": "2802DBB2585673E991F37A4553A8D7B01F03A4848ED76DFCE605740FFA084F61"
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "suiteVersion": "0.1.0-observed",
+  "reference": {
+    "name": "8saju",
+    "url": "https://8saju.com/mobile/",
+    "observedAt": "2026-10-07",
+    "role": "external-compatibility-reference-not-source-of-truth"
+  },
+  "observedRules": {
+    "solarTermPrecision": "minute",
+    "termInterval": "current-inclusive-next-exclusive",
+    "dayBoundaryLocal": "23:30",
+    "ziHourLocal": "[23:30,01:30)",
+    "lateZiToggle": true,
+    "luckAgeFormula": "floor((elapsedMilliseconds / 86400000 / 3) + 0.5)",
+    "minimumLuckAge": 1,
+    "subsequentLuckAgeStepYears": 10,
+    "currentAgeFormula": "currentGregorianYear - birthGregorianYear + 1"
+  },
+  "cases": [
+    {
+      "id": "8SAJU-SYNTH-001",
+      "purpose": "baseline pillars and reverse luck age",
+      "input": {
+        "calendar": "solar",
+        "localDateTime": "2000-01-01T12:00:00",
+        "sex": "male"
+      },
+      "observed": {
+        "pillars": {
+          "year": "己卯",
+          "month": "丙子",
+          "day": "戊午",
+          "hour": "戊午"
+        },
+        "previousTermLocal": "1999-12-07T04:36:00",
+        "nextTermLocal": "2000-01-06T15:48:00",
+        "firstLuckAge": 8,
+        "luckAges": [8, 18, 28, 38, 48, 58, 68, 78, 88, 98]
+      }
+    },
+    {
+      "id": "8SAJU-BOUNDARY-ZI-001",
+      "purpose": "fixed 23:30 day and hour boundary",
+      "input": {
+        "calendar": "solar",
+        "localDateTime": "2000-01-01T23:29:00",
+        "sex": "male"
+      },
+      "observed": {
+        "dayPillar": "戊午",
+        "hourPillar": "癸亥"
+      }
+    },
+    {
+      "id": "8SAJU-BOUNDARY-ZI-002",
+      "purpose": "fixed 23:30 day and hour boundary",
+      "input": {
+        "calendar": "solar",
+        "localDateTime": "2000-01-01T23:30:00",
+        "sex": "male"
+      },
+      "observed": {
+        "dayPillar": "己未",
+        "hourPillar": "甲子"
+      }
+    },
+    {
+      "id": "8SAJU-LATE-ZI-001",
+      "purpose": "late-Zi toggle changes day pillar but not hour pillar",
+      "input": {
+        "calendar": "solar",
+        "localDateTime": "2000-01-01T23:45:00",
+        "sex": "male"
+      },
+      "observed": {
+        "defaultMode": "early-zi",
+        "defaultDayPillar": "己未",
+        "defaultHourPillar": "甲子",
+        "alternateMode": "late-zi",
+        "alternateDayPillar": "戊午",
+        "alternateHourPillar": "甲子"
+      }
+    },
+    {
+      "id": "8SAJU-BOUNDARY-LICHUN-001",
+      "purpose": "year and month change at the exact stored minute",
+      "input": {
+        "calendar": "solar",
+        "localDateTime": "2000-02-04T03:27:00",
+        "sex": "male"
+      },
+      "observed": {
+        "yearPillar": "己卯",
+        "monthPillar": "丁丑",
+        "nextTermLocal": "2000-02-04T03:28:00",
+        "firstLuckAge": 9
+      }
+    },
+    {
+      "id": "8SAJU-BOUNDARY-LICHUN-002",
+      "purpose": "year and month change at the exact stored minute",
+      "input": {
+        "calendar": "solar",
+        "localDateTime": "2000-02-04T03:28:00",
+        "sex": "male"
+      },
+      "observed": {
+        "yearPillar": "庚辰",
+        "monthPillar": "戊寅",
+        "previousTermLocal": "2000-02-04T03:28:00",
+        "firstLuckAge": 10
+      }
+    },
+    {
+      "id": "8SAJU-MINIMUM-LUCK-AGE-001",
+      "purpose": "rounded zero is coerced to one",
+      "input": {
+        "calendar": "solar",
+        "localDateTime": "2000-02-04T03:28:00",
+        "sex": "female"
+      },
+      "observed": {
+        "direction": "reverse",
+        "previousTermLocal": "2000-02-04T03:28:00",
+        "firstLuckAge": 1
+      }
+    }
+  ],
+  "termComparisons": [
+    {
+      "goldenCaseId": "GC-LUCK-001",
+      "term": "芒種",
+      "referenceLocal": "1989-06-06T02:04:00+09:00",
+      "ourProvisionalLocal": "1989-06-06T02:05:14+09:00",
+      "referenceMinusOurSeconds": -74,
+      "referenceRoundedLuckAge": 8
+    },
+    {
+      "goldenCaseId": "GC-LUCK-002",
+      "term": "清明",
+      "referenceLocal": "1986-04-05T11:05:00+09:00",
+      "ourProvisionalLocal": "1986-04-05T11:06:07+09:00",
+      "referenceMinusOurSeconds": -67,
+      "referenceRoundedLuckAge": 1
+    },
+    {
+      "goldenCaseId": "GC-LUCK-003",
+      "term": "大雪",
+      "referenceLocal": "1975-12-08T02:45:00+09:00",
+      "ourProvisionalLocal": "1975-12-08T02:46:11+09:00",
+      "referenceMinusOurSeconds": -71,
+      "referenceRoundedLuckAge": 9
+    }
+  ]
+}

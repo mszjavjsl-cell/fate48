@@ -1,0 +1,101 @@
+{
+  "$schema": "./golden-cases.schema.json",
+  "suiteVersion": "0.1.0-draft",
+  "profileId": "kr-traditional-v1-draft",
+  "cases": [
+    {
+      "id": "GC-LUCK-001",
+      "status": "provisional",
+      "purpose": "forward luck-cycle calculation for a yin-year female",
+      "input": {
+        "calendar": "gregorian",
+        "localDateTime": "1989-05-13T07:15:00",
+        "timeZone": "Asia/Seoul",
+        "utcOffset": "+09:00",
+        "sex": "female"
+      },
+      "fixtures": {
+        "yearPillar": "己巳",
+        "monthPillar": "己巳",
+        "basisTerm": "芒種",
+        "basisTermLocalDateTime": "1989-06-06T02:05:14+09:00",
+        "basisTermUtc": "1989-06-05T17:05:14Z",
+        "ephemerisStatus": "unlocked"
+      },
+      "expected": {
+        "direction": "forward",
+        "elapsedSeconds": 2055014,
+        "elapsedParts": { "days": 23, "hours": 18, "minutes": 50, "seconds": 14 },
+        "convertedPeriod": { "years": 7, "months": 11, "days": 4, "hours": 4, "minutes": 28, "seconds": 0 },
+        "firstTransitionLocalDateTime": "1997-04-17T11:43:00+09:00",
+        "cycles": [
+          { "ordinal": 1, "pillar": "庚午", "transitionLocalDateTime": "1997-04-17T11:43:00+09:00" },
+          { "ordinal": 2, "pillar": "辛未", "transitionLocalDateTime": "2007-04-17T11:43:00+09:00" },
+          { "ordinal": 3, "pillar": "壬申", "transitionLocalDateTime": "2017-04-17T11:43:00+09:00" },
+          { "ordinal": 4, "pillar": "癸酉", "transitionLocalDateTime": "2027-04-17T11:43:00+09:00" },
+          { "ordinal": 5, "pillar": "甲戌", "transitionLocalDateTime": "2037-04-17T11:43:00+09:00" }
+        ]
+      }
+    },
+    {
+      "id": "GC-LUCK-002",
+      "status": "provisional",
+      "purpose": "forward luck-cycle calculation for a yang-year male",
+      "input": {
+        "calendar": "gregorian",
+        "localDateTime": "1986-04-02T15:25:00",
+        "timeZone": "Asia/Seoul",
+        "utcOffset": "+09:00",
+        "sex": "male"
+      },
+      "fixtures": {
+        "yearPillar": "丙寅",
+        "monthPillar": "辛卯",
+        "basisTerm": "清明",
+        "basisTermLocalDateTime": "1986-04-05T11:06:07+09:00",
+        "basisTermUtc": "1986-04-05T02:06:07Z",
+        "ephemerisStatus": "unlocked"
+      },
+      "expected": {
+        "direction": "forward",
+        "elapsedSeconds": 243667,
+        "elapsedParts": { "days": 2, "hours": 19, "minutes": 41, "seconds": 7 },
+        "convertedPeriod": { "years": 0, "months": 11, "days": 8, "hours": 10, "minutes": 14, "seconds": 0 },
+        "firstTransitionLocalDateTime": "1987-03-11T01:39:00+09:00",
+        "cycles": [
+          { "ordinal": 1, "pillar": "壬辰", "transitionLocalDateTime": "1987-03-11T01:39:00+09:00" },
+          { "ordinal": 2, "pillar": "癸巳", "transitionLocalDateTime": "1997-03-11T01:39:00+09:00" },
+          { "ordinal": 3, "pillar": "甲午", "transitionLocalDateTime": "2007-03-11T01:39:00+09:00" },
+          { "ordinal": 4, "pillar": "乙未", "transitionLocalDateTime": "2017-03-11T01:39:00+09:00" },
+          { "ordinal": 5, "pillar": "丙申", "transitionLocalDateTime": "2027-03-11T01:39:00+09:00" }
+        ]
+      }
+    },
+    {
+      "id": "GC-LUCK-003",
+      "status": "provisional",
+      "purpose": "reverse elapsed-time and conversion arithmetic",
+      "input": {
+        "calendar": "gregorian",
+        "localDateTime": "1976-01-04T18:00:00",
+        "timeZone": "Asia/Seoul",
+        "utcOffset": "+09:00",
+        "directionOverride": "reverse"
+      },
+      "fixtures": {
+        "basisTerm": "大雪",
+        "basisTermLocalDateTime": "1975-12-08T02:46:11+09:00",
+        "basisTermUtc": "1975-12-07T17:46:11Z",
+        "ephemerisStatus": "unlocked"
+      },
+      "expected": {
+        "direction": "reverse",
+        "elapsedSeconds": 2387629,
+        "elapsedParts": { "days": 27, "hours": 15, "minutes": 13, "seconds": 49 },
+        "convertedPeriod": { "years": 9, "months": 2, "days": 16, "hours": 3, "minutes": 38, "seconds": 0 },
+        "firstTransitionLocalDateTime": "1985-03-20T21:38:00+09:00",
+        "cycles": []
+      }
+    }
+  ]
+}

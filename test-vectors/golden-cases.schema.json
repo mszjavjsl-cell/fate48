@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/manse/golden-cases.schema.json",
+  "title": "Manse calendar golden cases",
+  "type": "object",
+  "required": ["suiteVersion", "profileId", "cases"],
+  "properties": {
+    "suiteVersion": { "type": "string" },
+    "profileId": { "type": "string" },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "status", "input", "fixtures", "expected"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^GC-[A-Z]+-[0-9]{3}$" },
+          "status": { "enum": ["locked", "provisional", "exploratory"] },
+          "purpose": { "type": "string" },
+          "input": { "type": "object" },
+          "fixtures": { "type": "object" },
+          "expected": {
+            "type": "object",
+            "required": ["direction", "elapsedSeconds", "elapsedParts", "convertedPeriod", "firstTransitionLocalDateTime", "cycles"],
+            "properties": {
+              "direction": { "enum": ["forward", "reverse"] },
+              "elapsedSeconds": { "type": "integer", "minimum": 0 },
+              "elapsedParts": { "$ref": "#/$defs/elapsedParts" },
+              "convertedPeriod": { "$ref": "#/$defs/convertedPeriod" },
+              "firstTransitionLocalDateTime": { "type": "string", "format": "date-time" },
+              "cycles": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["ordinal", "pillar", "transitionLocalDateTime"],
+                  "properties": {
+                    "ordinal": { "type": "integer", "minimum": 1 },
+                    "pillar": { "type": "string", "minLength": 2, "maxLength": 2 },
+                    "transitionLocalDateTime": { "type": "string", "format": "date-time" }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "elapsedParts": {
+      "type": "object",
+      "required": ["days", "hours", "minutes", "seconds"],
+      "properties": {
+        "days": { "type": "integer", "minimum": 0 },
+        "hours": { "type": "integer", "minimum": 0, "maximum": 23 },
+        "minutes": { "type": "integer", "minimum": 0, "maximum": 59 },
+        "seconds": { "type": "integer", "minimum": 0, "maximum": 59 }
+      },
+      "additionalProperties": false
+    },
+    "convertedPeriod": {
+      "type": "object",
+      "required": ["years", "months", "days", "hours", "minutes", "seconds"],
+      "properties": {
+        "years": { "type": "integer", "minimum": 0 },
+        "months": { "type": "integer", "minimum": 0, "maximum": 11 },
+        "days": { "type": "integer", "minimum": 0, "maximum": 29 },
+        "hours": { "type": "integer", "minimum": 0, "maximum": 23 },
+        "minutes": { "type": "integer", "minimum": 0, "maximum": 59 },
+        "seconds": { "type": "integer", "minimum": 0, "maximum": 59 }
+      },
+      "additionalProperties": false
+    }
+  }
+}

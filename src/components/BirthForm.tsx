@@ -77,7 +77,7 @@ export function BirthForm({ initialValue, onCalculate }: BirthFormProps) {
           inputMode="numeric"
           maxLength={12}
           pattern="(?:[0-9]{8}|[0-9]{12})"
-          placeholder="19890513 또는 198905130715"
+          placeholder="19001230 또는 201012311525"
           autoComplete="bday"
           value={digits}
           required

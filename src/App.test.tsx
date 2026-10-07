@@ -13,7 +13,9 @@ describe('Manse application', () => {
   it('starts without preset birth data or calculated results', () => {
     render(<App />)
 
-    expect(screen.getByLabelText('생년월일 또는 생년월일시분 숫자')).toHaveValue('')
+    const birthInput = screen.getByLabelText('생년월일 또는 생년월일시분 숫자')
+    expect(birthInput).toHaveValue('')
+    expect(birthInput).toHaveAttribute('placeholder', '19001230 또는 201012311525')
     expect(screen.queryByRole('group', { name: '사주 원국' })).not.toBeInTheDocument()
     expect(screen.queryByRole('group', { name: '출생정보' })).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: '계산 근거' })).not.toBeInTheDocument()

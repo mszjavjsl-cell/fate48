@@ -41,6 +41,13 @@ const ELEMENT_LABELS: Record<string, string> = {
   水: '수',
 }
 
+const PILLAR_READINGS: Record<string, string> = {
+  甲: '갑', 乙: '을', 丙: '병', 丁: '정', 戊: '무',
+  己: '기', 庚: '경', 辛: '신', 壬: '임', 癸: '계',
+  子: '자', 丑: '축', 寅: '인', 卯: '묘', 辰: '진', 巳: '사',
+  午: '오', 未: '미', 申: '신', 酉: '유', 戌: '술', 亥: '해',
+}
+
 const TEN_GOD_LABELS: Record<string, TenGodInfo> = {
   比肩: { name: '비견', group: '비겁' },
   劫财: { name: '겁재', group: '비겁' },
@@ -78,6 +85,10 @@ export function getTenGodInfo(dayStem: string, targetStem: string): TenGodInfo {
 
 export function getTenGod(dayStem: string, targetStem: string): string {
   return getTenGodInfo(dayStem, targetStem).name
+}
+
+export function getPillarReading(pillar: string): string {
+  return [...pillar].map((character) => PILLAR_READINGS[character] ?? character).join('')
 }
 
 export function makePillarInfo(

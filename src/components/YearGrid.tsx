@@ -20,7 +20,10 @@ export function YearGrid({ years, selectedIndex, onSelect }: YearGridProps) {
         >
           <span className="year-number">{year.year}</span>
           <span className="year-age">{year.age}세</span>
-          <strong>{year.pillar}</strong>
+          <span className="year-pillar">
+            <strong>{year.pillar}</strong>
+            <small>{year.pillarReading}</small>
+          </span>
           <span className="year-ten-god">{year.tenGod}</span>
         </button>
       ))}

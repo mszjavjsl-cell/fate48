@@ -140,9 +140,12 @@ export default function App() {
               <p>연 나이 · 시작 연도 · 간지</p>
             </div>
             <LuckRail cycles={result.luck.cycles} selectedIndex={selectedCycleIndex} onSelect={selectCycle} />
-            <div className="selection-caption">
+            <div className="selection-caption" role="group" aria-label="선택한 대운">
               <span>{selectedCycle.ordinal}번째 대운</span>
-              <strong>{selectedCycle.pillar}</strong>
+              <strong>
+                <span>{selectedCycle.pillar}</span>
+                <small>{selectedCycle.pillarReading}</small>
+              </strong>
               <span>{formatDateTime(selectedCycle.transitionLocal)} 교운</span>
             </div>
           </section>

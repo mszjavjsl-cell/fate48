@@ -119,9 +119,7 @@ export function BirthForm({ initialValue, onCalculate }: BirthFormProps) {
           />
           <span><strong>윤달</strong><small>윤달 생일일 때만 선택</small></span>
         </label>
-      ) : (
-        <p className="calendar-note">대한민국 표준시 기준</p>
-      )}
+      ) : null}
 
       <button className="calculate-button" type="submit">
         <span>만세력 계산</span>

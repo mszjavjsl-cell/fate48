@@ -38,13 +38,19 @@ await mobile.getByRole('button', { name: '만세력 계산' }).click()
 await mobile.getByText('음력 1989년 4월 9일 07시 15분', { exact: true }).waitFor()
 await mobile.getByText('양력 환산 1989년 5월 13일', { exact: true }).waitFor()
 await mobile.getByRole('group', { name: '시주 丙辰' }).getByText('정재', { exact: true }).waitFor()
+if (await mobile.getByText('대한민국 표준시 기준', { exact: true }).count()) {
+  throw new Error('The removed standard-time card is still visible.')
+}
 assertNoBodyOverflow(await mobile.evaluate(() => ({
   viewport: document.documentElement.clientWidth,
   body: document.body.scrollWidth,
   document: document.documentElement.scrollWidth,
 })), 'mobile')
 await mobile.getByRole('button', { name: '辛未 대운, 2007년 시작, 19세' }).click()
-await mobile.getByRole('button', { name: '2007년, 19세, 丁亥 세운' }).click()
+await mobile.getByRole('group', { name: '선택한 대운' }).getByText('신미', { exact: true }).waitFor()
+const selectedAnnual = mobile.getByRole('button', { name: '2007년, 19세, 丁亥 세운' })
+await selectedAnnual.getByText('정해', { exact: true }).waitFor()
+await selectedAnnual.click()
 if (!(await mobile.getByRole('heading', { name: '2007년 세운' }).isVisible())) {
   throw new Error('Annual fortune detail did not update on mobile.')
 }

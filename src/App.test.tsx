@@ -9,6 +9,7 @@ describe('Manse application', () => {
     render(<App />)
 
     expect(screen.queryByLabelText('표준 시간대')).not.toBeInTheDocument()
+    expect(screen.queryByText('대한민국 표준시 기준')).not.toBeInTheDocument()
     for (const englishSubLabel of [
       'PRECISION CALENDAR · LOCAL LAB',
       'PROFILE',
@@ -28,9 +29,9 @@ describe('Manse application', () => {
     expect(screen.getByText(/망종/)).toBeInTheDocument()
 
     const hourPillar = within(board).getByRole('group', { name: '시주 丙辰' })
-    expect(within(hourPillar).getByText('재성')).toBeInTheDocument()
+    expect(within(hourPillar).queryByText('재성')).not.toBeInTheDocument()
     expect(within(hourPillar).getByText('정재')).toBeInTheDocument()
-    expect(within(hourPillar).getByText('관성')).toBeInTheDocument()
+    expect(within(hourPillar).queryByText('관성')).not.toBeInTheDocument()
     expect(within(hourPillar).getByText('정관')).toBeInTheDocument()
     expect(within(hourPillar).getByText('양화')).toBeInTheDocument()
     expect(within(hourPillar).getByText('양토')).toBeInTheDocument()
@@ -80,8 +81,10 @@ describe('Manse application', () => {
     const decade = screen.getByRole('button', { name: /辛未 대운.*2007년 시작.*19세/ })
     await user.click(decade)
     expect(decade).toHaveAttribute('aria-pressed', 'true')
+    expect(within(screen.getByRole('group', { name: '선택한 대운' })).getByText('신미')).toBeInTheDocument()
 
     const annual = screen.getByRole('button', { name: /2007년.*19세.*丁亥 세운/ })
+    expect(within(annual).getByText('정해')).toBeInTheDocument()
     await user.click(annual)
     expect(annual).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('heading', { name: '2007년 세운' })).toBeInTheDocument()

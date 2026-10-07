@@ -138,18 +138,6 @@ button { color: inherit; }
 .leap-field span { display: grid; line-height: 1.2; }
 .leap-field strong { font-size: .76rem; }
 .leap-field small { margin-top: 2px; color: var(--muted); font-size: .57rem; }
-.calendar-note {
-  min-height: 46px;
-  margin: 0;
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-  color: var(--muted);
-  border: 1px solid var(--line);
-  background: #f2f5f2;
-  font-size: .68rem;
-}
-
 .calculate-button {
   min-height: 50px;
   margin-top: 4px;
@@ -173,9 +161,7 @@ button { color: inherit; }
 .pillar-column { min-width: 0; padding: 10px 4px 12px; display: grid; place-items: center; border-left: 1px solid var(--line); }
 .pillar-column:first-child { border-left: 0; }
 .pillar-label { color: var(--muted); font-size: .68rem; }
-.relation { min-height: 28px; margin-top: 7px; display: flex; align-items: baseline; justify-content: center; gap: 3px; white-space: nowrap; }
-.relation strong { color: var(--ink); font-size: clamp(.57rem, 2.5vw, .68rem); }
-.relation span { color: var(--muted); font-size: clamp(.52rem, 2.2vw, .62rem); }
+.relation { min-height: 24px; margin-top: 7px; display: flex; align-items: center; justify-content: center; color: var(--ink); font-size: clamp(.57rem, 2.5vw, .68rem); font-weight: 720; white-space: nowrap; }
 .element-label { margin-top: 3px; font-size: clamp(.55rem, 2.35vw, .65rem); font-weight: 740; letter-spacing: .02em; }
 .ganji { width: 100%; display: grid; place-items: center; font: 740 clamp(1.8rem, 10vw, 2.65rem)/1.12 'Noto Serif KR Variable', serif; }
 .ganji.stem { padding-top: 1px; }
@@ -236,18 +222,21 @@ button { color: inherit; }
 .decade-button:focus-visible, .year-button:focus-visible { outline: 3px solid rgba(196,81,54,.4); outline-offset: -3px; z-index: 2; }
 
 .selection-caption { min-height: 48px; padding: 11px 12px; display: grid; grid-template-columns: auto auto 1fr; gap: 9px; align-items: center; color: var(--muted); border: 1px solid var(--line); border-top: 0; font-size: .66rem; }
-.selection-caption strong { color: var(--vermilion); font: 700 1.04rem 'Noto Serif KR Variable', serif; }
-.selection-caption span:last-child { text-align: right; }
+.selection-caption strong { display: flex; align-items: baseline; gap: 4px; color: var(--vermilion); font: 700 1.04rem 'Noto Serif KR Variable', serif; }
+.selection-caption strong small { color: var(--muted); font: 650 .62rem 'Noto Sans KR Variable', sans-serif; }
+.selection-caption > span:last-child { text-align: right; }
 
 .annual-section { padding-bottom: 24px; }
 .year-grid { margin-top: 16px; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); border-top: 1px solid var(--line-dark); border-left: 1px solid var(--line-dark); }
 .year-button { min-height: 92px; padding: 10px; display: grid; grid-template-columns: 1fr auto; align-content: center; gap: 2px 8px; text-align: left; border: 0; border-right: 1px solid var(--line-dark); border-bottom: 1px solid var(--line-dark); background: #fff; cursor: pointer; }
 .year-number { color: var(--muted); font-size: .68rem; }
 .year-age { color: var(--jade); font-size: .68rem; font-weight: 740; }
+.year-pillar { display: flex; align-items: baseline; gap: 5px; }
 .year-button strong { font: 720 1.45rem 'Noto Serif KR Variable', serif; }
+.year-pillar small { color: var(--muted); font-size: .62rem; font-weight: 680; }
 .year-ten-god { align-self: end; color: var(--muted); font-size: .65rem; }
 .year-button[aria-pressed='true'] { color: #fff; background: var(--vermilion); }
-.year-button[aria-pressed='true'] span { color: #fff; }
+.year-button[aria-pressed='true'] span, .year-button[aria-pressed='true'] small { color: #fff; }
 
 .annual-detail { min-height: 148px; margin-bottom: 28px; padding: 20px; display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; color: #fff; background: var(--ink); border-bottom: 4px solid var(--vermilion); }
 .detail-index { align-self: start; color: #89aa9f; font-size: .68rem; font-weight: 800; }

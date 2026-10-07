@@ -21,9 +21,8 @@ export function PillarBoard({ pillars }: PillarBoardProps) {
             aria-label={`${pillar.label} ${pillar.pillar}`}
           >
             <span className="pillar-label">{pillar.label}</span>
-            <span className="relation relation-stem" aria-label={`천간 ${pillar.tenGodGroup} ${pillar.tenGod}`}>
-              <strong>{pillar.tenGodGroup}</strong>
-              <span>{pillar.tenGod}</span>
+            <span className="relation relation-stem" aria-label={`천간 십성 ${pillar.tenGod}`}>
+              {pillar.tenGod}
             </span>
             <span className="element-label" data-element={pillar.stemElement}>
               {pillar.stemYinYang}{pillar.stemElementLabel}
@@ -33,9 +32,8 @@ export function PillarBoard({ pillars }: PillarBoardProps) {
             <span className="element-label" data-element={pillar.branchElement}>
               {pillar.branchYinYang}{pillar.branchElementLabel}
             </span>
-            <span className="relation relation-branch" aria-label={`지지 ${pillar.branchTenGodGroup} ${pillar.branchTenGod}`}>
-              <strong>{pillar.branchTenGodGroup}</strong>
-              <span>{pillar.branchTenGod}</span>
+            <span className="relation relation-branch" aria-label={`지지 십성 ${pillar.branchTenGod}`}>
+              {pillar.branchTenGod}
             </span>
             <span className="hidden-stems" aria-label={`지장간 ${pillar.hiddenStems.join(' ')}`}>
               {pillar.hiddenStems.join(' · ')}

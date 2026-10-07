@@ -1,7 +1,7 @@
 import { Temporal } from '@js-temporal/polyfill'
 import { LunarDay, SixtyCycle, SixtyCycleYear, SolarDay, SolarTime } from 'tyme4ts'
 
-import { getCivilDayCycle, getHourCycle, getTenGod, makePillarInfo, type PillarInfo } from './ganji'
+import { getCivilDayCycle, getHourCycle, getPillarReading, getTenGod, makePillarInfo, type PillarInfo } from './ganji'
 import { addLuckPeriod, convertElapsedToLuckPeriod, splitElapsedSeconds, type ElapsedParts, type LuckPeriod } from './luck'
 import { findBasisTerm, type LuckDirection } from './terms'
 
@@ -18,12 +18,14 @@ export interface AnnualFortune {
   year: number
   age: number
   pillar: string
+  pillarReading: string
   tenGod: string
 }
 
 export interface DecadeFortune {
   ordinal: number
   pillar: string
+  pillarReading: string
   transitionLocal: string
   startYear: number
   startAge: number
@@ -136,6 +138,7 @@ function createAnnualFortunes(
       year,
       age: year - birthYear + 1,
       pillar: cycle.getName(),
+      pillarReading: getPillarReading(cycle.getName()),
       tenGod: getTenGod(dayStem, cycle.getHeavenStem().getName()),
     }
   })
@@ -159,6 +162,7 @@ function createDecadeFortunes(
     fortunes.push({
       ordinal,
       pillar: cycle.getName(),
+      pillarReading: getPillarReading(cycle.getName()),
       transitionLocal: transition.toString({ smallestUnit: 'second' }),
       startYear,
       startAge: startYear - birth.year + 1,

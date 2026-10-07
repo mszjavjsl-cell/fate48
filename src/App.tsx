@@ -5,12 +5,14 @@ import { LuckRail } from './components/LuckRail'
 import { PillarBoard } from './components/PillarBoard'
 import { YearGrid } from './components/YearGrid'
 import { calculateManse, type BirthInput, type ManseResult } from './domain/manse'
+import { DEFAULT_BIRTH_LOCATION } from './domain/locations'
 
 const DEFAULT_INPUT: BirthInput = {
   date: '1989-05-13',
   time: '07:15',
   sex: 'female',
   calendar: 'solar',
+  location: DEFAULT_BIRTH_LOCATION,
 }
 
 function formatDateTime(value: string): string {
@@ -40,6 +42,14 @@ function formatBirthInformation(result: ManseResult): string {
 function formatSolarDate(value: string): string {
   const [year, month, day] = value.split('-').map(Number)
   return `양력 환산 ${year}년 ${month}월 ${day}일`
+}
+
+function formatLongitudeCorrection(totalSeconds: number): string {
+  const sign = totalSeconds < 0 ? '-' : totalSeconds > 0 ? '+' : ''
+  const absolute = Math.abs(totalSeconds)
+  const minutes = Math.floor(absolute / 60)
+  const seconds = absolute % 60
+  return `${sign}${minutes}분 ${String(seconds).padStart(2, '0')}초`
 }
 
 function findCurrentCycle(result: ManseResult): number {
@@ -107,6 +117,9 @@ export default function App() {
             </div>
             <dl>
               <div><dt>음력</dt><dd>{result.lunarDate.year}년 {result.lunarDate.leap ? '윤' : ''}{result.lunarDate.month}월 {result.lunarDate.day}일</dd></div>
+              <div><dt>출생지</dt><dd>{result.input.location ? `${result.input.location.name} · ${result.input.location.longitude}°E` : '미지정'}</dd></div>
+              <div><dt>경도 보정</dt><dd>{formatLongitudeCorrection(result.normalizedBirth.longitudeCorrectionSeconds)}</dd></div>
+              <div><dt>보정 시각</dt><dd>{formatDateTime(result.normalizedBirth.solarLocalDateTime)}</dd></div>
               <div><dt>대운 방향</dt><dd>{result.luck.directionLabel}</dd></div>
               <div><dt>기준 절기</dt><dd>{result.luck.basisTerm.name} <small>{result.luck.basisTerm.hanja}</small></dd></div>
               <div><dt>절입 시각</dt><dd>{formatDateTime(result.luck.basisTerm.localDateTime)}</dd></div>

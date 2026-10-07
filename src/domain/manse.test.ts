@@ -46,6 +46,37 @@ describe('calculateManse', () => {
     expect(result.luck.cycles[0].pillar).toBe('壬辰')
   })
 
+  it('uses longitude-corrected local mean solar time for the 1986 Seoul hour pillar', () => {
+    const input = {
+      date: '1986-04-02',
+      time: '15:25',
+      sex: 'male',
+      location: { id: 'seoul', name: '서울', longitude: 126.978 },
+    } as Parameters<typeof calculateManse>[0]
+
+    const result = calculateManse(input)
+
+    expect(result.normalizedBirth.solarLocalDateTime).toContain('1986-04-02T14:52:55')
+    expect(result.normalizedBirth.longitudeCorrectionSeconds).toBe(-1925)
+    expect(result.pillars[3].pillar).toBe('乙未')
+  })
+
+  it('keeps the civil-date day pillar when longitude correction crosses midnight', () => {
+    const civilInput = {
+      date: '1989-05-14',
+      time: '00:10',
+      sex: 'female',
+    } as const
+    const standardTime = calculateManse(civilInput)
+    const longitudeCorrected = calculateManse({
+      ...civilInput,
+      location: { id: 'seoul', name: '서울', longitude: 126.978 },
+    })
+
+    expect(longitudeCorrected.normalizedBirth.solarLocalDateTime).toContain('1989-05-13T23:37:55')
+    expect(longitudeCorrected.pillars[2].pillar).toBe(standardTime.pillars[2].pillar)
+  })
+
   it('uses the calculated year stem and sex to select reverse motion', () => {
     const result = calculateManse({
       date: '1989-05-13',

@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 
 import type { BirthInput } from '../domain/manse'
+import { DEFAULT_BIRTH_LOCATION, getBirthLocation, KOREAN_BIRTH_LOCATIONS } from '../domain/locations'
 
 interface BirthFormProps {
   initialValue: BirthInput
@@ -18,6 +19,7 @@ export function BirthForm({ initialValue, onCalculate }: BirthFormProps) {
   )
   const [leapMonth, setLeapMonth] = useState(initialValue.leapMonth ?? false)
   const [sex, setSex] = useState(initialValue.sex)
+  const [locationId, setLocationId] = useState(initialValue.location?.id ?? DEFAULT_BIRTH_LOCATION.id)
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -29,6 +31,7 @@ export function BirthForm({ initialValue, onCalculate }: BirthFormProps) {
       date: `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6, 8)}`,
       time: `${digits.slice(8, 10)}:${digits.slice(10, 12)}`,
       sex,
+      location: getBirthLocation(locationId),
     })
   }
 
@@ -108,6 +111,19 @@ export function BirthForm({ initialValue, onCalculate }: BirthFormProps) {
           </label>
         </div>
       </fieldset>
+
+      <label className="field location-field">
+        <span>출생지</span>
+        <select
+          aria-label="출생지"
+          value={locationId}
+          onChange={(event) => setLocationId(event.target.value)}
+        >
+          {KOREAN_BIRTH_LOCATIONS.map((location) => (
+            <option key={location.id} value={location.id}>{location.name}</option>
+          ))}
+        </select>
+      </label>
 
       {calendar === 'lunar' ? (
         <label className="leap-field">

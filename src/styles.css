@@ -125,6 +125,7 @@ button { color: inherit; }
 .segmented-control input:focus-visible + span { outline: 3px solid rgba(35,106,90,.25); outline-offset: -3px; }
 .calendar-control span { letter-spacing: .04em; }
 .leap-field {
+  grid-column: 1 / -1;
   min-height: 46px;
   padding: 6px 10px;
   display: flex;

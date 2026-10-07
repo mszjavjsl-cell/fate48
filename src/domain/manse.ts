@@ -2,6 +2,7 @@ import { Temporal } from '@js-temporal/polyfill'
 import { LunarDay, SixtyCycle, SixtyCycleYear, SolarDay, SolarTime } from 'tyme4ts'
 
 import { getCivilDayCycle, getHourCycle, getPillarReading, getTenGod, makePillarInfo, type PillarInfo } from './ganji'
+import type { BirthLocation } from './locations'
 import { addLuckPeriod, convertElapsedToLuckPeriod, splitElapsedSeconds, type ElapsedParts, type LuckPeriod } from './luck'
 import { findBasisTerm, type LuckDirection } from './terms'
 
@@ -12,6 +13,7 @@ export interface BirthInput {
   calendar?: 'solar' | 'lunar'
   leapMonth?: boolean
   timeZone?: string
+  location?: BirthLocation
 }
 
 export interface AnnualFortune {
@@ -38,6 +40,8 @@ export interface ManseResult {
     localDateTime: string
     utc: string
     solarDate: string
+    solarLocalDateTime: string
+    longitudeCorrectionSeconds: number
   }
   lunarDate: {
     year: number
@@ -72,6 +76,7 @@ export interface ManseResult {
 }
 
 const YANG_STEMS = new Set(['甲', '丙', '戊', '庚', '壬'])
+const KOREA_STANDARD_MERIDIAN = 135
 
 function parseBirth(input: BirthInput): Temporal.ZonedDateTime {
   const dateParts = /^(\d{4})-(\d{2})-(\d{2})$/.exec(input.date)
@@ -100,7 +105,14 @@ function getLuckDirection(yearStem: string, sex: BirthInput['sex']): LuckDirecti
   return (isYang && sex === 'male') || (!isYang && sex === 'female') ? 'forward' : 'reverse'
 }
 
-function calculatePillars(birth: Temporal.ZonedDateTime): PillarInfo[] {
+function getLongitudeCorrectionSeconds(location?: BirthLocation): number {
+  return location ? Math.round((location.longitude - KOREA_STANDARD_MERIDIAN) * 4 * 60) : 0
+}
+
+function calculatePillars(
+  birth: Temporal.ZonedDateTime,
+  solarLocalBirth: Temporal.ZonedDateTime,
+): PillarInfo[] {
   // tyme4ts uses fixed UTC+8 civil fields, not historical Asia/Shanghai DST.
   const providerTime = birth.toInstant().toZonedDateTimeISO('+08:00')
   const providerEightChar = SolarTime.fromYmdHms(
@@ -115,7 +127,7 @@ function calculatePillars(birth: Temporal.ZonedDateTime): PillarInfo[] {
   const yearCycle = providerEightChar.getYear()
   const monthCycle = providerEightChar.getMonth()
   const dayCycle = getCivilDayCycle(birth.year, birth.month, birth.day)
-  const hourCycle = getHourCycle(dayCycle, birth.hour)
+  const hourCycle = getHourCycle(dayCycle, solarLocalBirth.hour)
   const dayMaster = dayCycle.getHeavenStem()
 
   return [
@@ -176,7 +188,9 @@ function createDecadeFortunes(
 
 export function calculateManse(input: BirthInput): ManseResult {
   const birth = parseBirth(input)
-  const pillars = calculatePillars(birth)
+  const longitudeCorrectionSeconds = getLongitudeCorrectionSeconds(input.location)
+  const solarLocalBirth = birth.add({ seconds: longitudeCorrectionSeconds })
+  const pillars = calculatePillars(birth, solarLocalBirth)
   const yearStem = pillars[0].stem
   const dayStem = pillars[2].stem
   const direction = getLuckDirection(yearStem, input.sex)
@@ -197,6 +211,8 @@ export function calculateManse(input: BirthInput): ManseResult {
       localDateTime: birth.toString({ smallestUnit: 'second' }),
       utc: birth.toInstant().toString({ smallestUnit: 'second' }),
       solarDate: `${String(birth.year).padStart(4, '0')}-${String(birth.month).padStart(2, '0')}-${String(birth.day).padStart(2, '0')}`,
+      solarLocalDateTime: solarLocalBirth.toString({ smallestUnit: 'second' }),
+      longitudeCorrectionSeconds,
     },
     lunarDate: {
       year: lunarMonth.getYear(),
@@ -228,12 +244,13 @@ export function calculateManse(input: BirthInput): ManseResult {
     },
     metadata: {
       profileId: 'kr-traditional-v1-draft',
-      profileVersion: '0.1.0',
+      profileVersion: '0.2.0',
       ephemerisProvider: 'tyme4ts / ShouXing astronomical calendar',
       ephemerisVersion: 'tyme4ts 1.5.3',
       termBoundaryPolicy: 'strict-adjacent-term',
       warnings: [
         '이 결과는 draft 계산 프로필이며 절입시각 권위 데이터는 아직 잠기지 않았습니다.',
+        '시주는 한국 표준자오선 135도와 출생지 경도에 따른 지방평균시를 사용하며 균시차는 적용하지 않습니다.',
         '세운의 나이는 해당 연도의 연 나이(연도 - 출생연도 + 1)입니다.',
       ],
     },

@@ -10,7 +10,7 @@ const DEFAULT_INPUT: BirthInput = {
   date: '1989-05-13',
   time: '07:15',
   sex: 'female',
-  timeZone: 'Asia/Seoul',
+  calendar: 'solar',
 }
 
 function formatDateTime(value: string): string {
@@ -28,6 +28,18 @@ function formatPeriod(period: ManseResult['luck']['convertedPeriod']): string {
     period.seconds && `${period.seconds}초`,
   ].filter(Boolean)
   return parts.join(' ')
+}
+
+function formatBirthInformation(result: ManseResult): string {
+  const [year, month, day] = result.input.date.split('-').map(Number)
+  const [hour, minute] = result.input.time.split(':')
+  const calendar = result.input.calendar === 'lunar' ? '음력' : '양력'
+  return `${calendar} ${year}년 ${month}월 ${day}일 ${hour}시 ${minute}분`
+}
+
+function formatSolarDate(value: string): string {
+  const [year, month, day] = value.split('-').map(Number)
+  return `양력 환산 ${year}년 ${month}월 ${day}일`
 }
 
 function findCurrentCycle(result: ManseResult): number {
@@ -78,13 +90,8 @@ export default function App() {
       <header className="masthead">
         <div className="brand-mark" aria-hidden="true">曆</div>
         <div className="brand-copy">
-          <span className="eyebrow">PRECISION CALENDAR · LOCAL LAB</span>
           <h1>정밀 만세력</h1>
           <p>절입 순간부터 교운까지, 계산 근거가 보이는 만세력 연구판</p>
-        </div>
-        <div className="profile-chip">
-          <span>PROFILE</span>
-          <strong>KR · v0.1</strong>
         </div>
       </header>
 
@@ -96,10 +103,7 @@ export default function App() {
 
           <section className="calculation-ledger" aria-labelledby="calculation-title">
             <div className="section-heading compact">
-              <div>
-                <span className="eyebrow">CALCULATION TRACE</span>
-                <h2 id="calculation-title">계산 근거</h2>
-              </div>
+              <h2 id="calculation-title">계산 근거</h2>
             </div>
             <dl>
               <div><dt>음력</dt><dd>{result.lunarDate.year}년 {result.lunarDate.leap ? '윤' : ''}{result.lunarDate.month}월 {result.lunarDate.day}일</dd></div>
@@ -115,14 +119,15 @@ export default function App() {
         <section className="fortune-column" aria-label="대운과 세운">
           <div className="fortune-intro">
             <div>
-              <span className="eyebrow">FORTUNE TIMELINE</span>
               <h2>운의 흐름</h2>
               <p>대운을 누르면 그 10년의 세운이 펼쳐집니다.</p>
             </div>
-            <div className="birth-summary">
-              <span>출생 원시각</span>
-              <strong>{formatDateTime(result.normalizedBirth.localDateTime)}</strong>
-              <small>{result.input.timeZone}</small>
+            <div className="birth-summary" role="group" aria-label="출생정보">
+              <span>출생정보</span>
+              <strong>{formatBirthInformation(result)}</strong>
+              {result.input.calendar === 'lunar' ? (
+                <small>{formatSolarDate(result.normalizedBirth.solarDate)}</small>
+              ) : null}
             </div>
           </div>
 
@@ -156,7 +161,6 @@ export default function App() {
           <section className="annual-detail" aria-labelledby="annual-detail-title">
             <div className="detail-index">{String(selectedYearIndex + 1).padStart(2, '0')}</div>
             <div className="detail-copy">
-              <span className="eyebrow">SELECTED ANNUAL FORTUNE</span>
               <h3 id="annual-detail-title">{selectedYear.year}년 세운</h3>
               <p>연 나이 {selectedYear.age}세 · {selectedCycle.pillar} 대운 안의 흐름</p>
             </div>

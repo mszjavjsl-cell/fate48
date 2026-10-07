@@ -25,6 +25,19 @@ mobile.on('console', (message) => {
 await mobile.goto('http://127.0.0.1:5173')
 await mobile.waitForLoadState('networkidle')
 await mobile.getByRole('heading', { name: '정밀 만세력' }).waitFor()
+const birthDigits = mobile.getByRole('textbox', { name: '생년월일시분 숫자 12자리' })
+await birthDigits.fill('198604021525')
+await mobile.getByRole('radio', { name: '남성' }).check()
+await mobile.getByRole('button', { name: '만세력 계산' }).click()
+await mobile.getByText('양력 1986년 4월 2일 15시 25분', { exact: true }).waitFor()
+
+await mobile.getByRole('radio', { name: '음력' }).check()
+await birthDigits.fill('198904090715')
+await mobile.getByRole('radio', { name: '여성' }).check()
+await mobile.getByRole('button', { name: '만세력 계산' }).click()
+await mobile.getByText('음력 1989년 4월 9일 07시 15분', { exact: true }).waitFor()
+await mobile.getByText('양력 환산 1989년 5월 13일', { exact: true }).waitFor()
+await mobile.getByRole('group', { name: '시주 丙辰' }).getByText('정재', { exact: true }).waitFor()
 assertNoBodyOverflow(await mobile.evaluate(() => ({
   viewport: document.documentElement.clientWidth,
   body: document.body.scrollWidth,
@@ -54,5 +67,5 @@ if (consoleErrors.length > 0) {
   throw new Error(`Browser console errors: ${consoleErrors.join(' | ')}`)
 }
 
-console.log('PASS mobile=390x844 desktop=1280x900 interactions=decade+annual consoleErrors=0')
+console.log('PASS mobile=390x844 desktop=1280x900 inputs=solar+lunar interactions=decade+annual consoleErrors=0')
 await browser.close()

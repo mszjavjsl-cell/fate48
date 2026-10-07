@@ -91,4 +91,49 @@ describe('calculateManse', () => {
     expect(result.luck.cycles[1].years[0]).toMatchObject({ year: 2007, age: 19, pillar: '丁亥' })
     expect(result.luck.cycles[1].years[9]).toMatchObject({ year: 2016, age: 28, pillar: '丙申' })
   })
+
+  it('converts a lunar birth date to the same solar instant before calculation', () => {
+    const result = calculateManse({
+      calendar: 'lunar',
+      date: '1989-04-09',
+      time: '07:15',
+      sex: 'female',
+    })
+
+    expect(result.normalizedBirth.solarDate).toBe('1989-05-13')
+    expect(result.pillars.map((item) => item.pillar)).toEqual(['己巳', '己巳', '癸酉', '丙辰'])
+  })
+
+  it('supports a valid lunar leap month', () => {
+    const result = calculateManse({
+      calendar: 'lunar',
+      leapMonth: true,
+      date: '2023-02-01',
+      time: '12:00',
+      sex: 'female',
+    })
+
+    expect(result.normalizedBirth.solarDate).toBe('2023-03-22')
+    expect(result.lunarDate).toMatchObject({ year: 2023, month: 2, day: 1, leap: true })
+  })
+
+  it('returns Korean ten-god groups and yin-yang element labels for both stem and branch', () => {
+    const result = calculateManse({
+      date: '1989-05-13',
+      time: '07:15',
+      sex: 'female',
+      timeZone: 'Asia/Seoul',
+    })
+
+    expect(result.pillars[3]).toMatchObject({
+      tenGod: '정재',
+      tenGodGroup: '재성',
+      branchTenGod: '정관',
+      branchTenGodGroup: '관성',
+      stemYinYang: '양',
+      stemElementLabel: '화',
+      branchYinYang: '양',
+      branchElementLabel: '토',
+    })
+  })
 })

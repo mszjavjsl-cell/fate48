@@ -1,5 +1,5 @@
 import { Temporal } from '@js-temporal/polyfill'
-import { HeavenStem, SixtyCycle, SixtyCycleYear, SolarDay, SolarTime } from 'tyme4ts'
+import { LunarDay, SixtyCycle, SixtyCycleYear, SolarDay, SolarTime } from 'tyme4ts'
 
 import { getCivilDayCycle, getHourCycle, getTenGod, makePillarInfo, type PillarInfo } from './ganji'
 import { addLuckPeriod, convertElapsedToLuckPeriod, splitElapsedSeconds, type ElapsedParts, type LuckPeriod } from './luck'
@@ -9,7 +9,9 @@ export interface BirthInput {
   date: string
   time: string
   sex: 'male' | 'female'
-  timeZone: string
+  calendar?: 'solar' | 'lunar'
+  leapMonth?: boolean
+  timeZone?: string
 }
 
 export interface AnnualFortune {
@@ -33,6 +35,7 @@ export interface ManseResult {
   normalizedBirth: {
     localDateTime: string
     utc: string
+    solarDate: string
   }
   lunarDate: {
     year: number
@@ -69,8 +72,25 @@ export interface ManseResult {
 const YANG_STEMS = new Set(['甲', '丙', '戊', '庚', '壬'])
 
 function parseBirth(input: BirthInput): Temporal.ZonedDateTime {
-  const plain = Temporal.PlainDateTime.from(`${input.date}T${input.time}`)
-  return plain.toZonedDateTime(input.timeZone, { disambiguation: 'reject' })
+  const dateParts = /^(\d{4})-(\d{2})-(\d{2})$/.exec(input.date)
+  if (!dateParts) {
+    throw new RangeError('생년월일은 YYYY-MM-DD 형식이어야 합니다.')
+  }
+
+  let solarDate = input.date
+  if (input.calendar === 'lunar') {
+    const year = Number(dateParts[1])
+    const month = Number(dateParts[2])
+    const day = Number(dateParts[3])
+    const lunarMonth = input.leapMonth ? -month : month
+    const solarDay = LunarDay.fromYmd(year, lunarMonth, day).getSolarDay()
+    solarDate = [solarDay.getYear(), solarDay.getMonth(), solarDay.getDay()]
+      .map((value, index) => index === 0 ? String(value).padStart(4, '0') : String(value).padStart(2, '0'))
+      .join('-')
+  }
+
+  const plain = Temporal.PlainDateTime.from(`${solarDate}T${input.time}`)
+  return plain.toZonedDateTime(input.timeZone ?? 'Asia/Seoul', { disambiguation: 'reject' })
 }
 
 function getLuckDirection(yearStem: string, sex: BirthInput['sex']): LuckDirection {
@@ -172,6 +192,7 @@ export function calculateManse(input: BirthInput): ManseResult {
     normalizedBirth: {
       localDateTime: birth.toString({ smallestUnit: 'second' }),
       utc: birth.toInstant().toString({ smallestUnit: 'second' }),
+      solarDate: `${String(birth.year).padStart(4, '0')}-${String(birth.month).padStart(2, '0')}-${String(birth.day).padStart(2, '0')}`,
     },
     lunarDate: {
       year: lunarMonth.getYear(),

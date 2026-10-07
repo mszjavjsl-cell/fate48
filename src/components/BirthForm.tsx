@@ -7,43 +7,80 @@ interface BirthFormProps {
   onCalculate: (input: BirthInput) => void
 }
 
+function toDigits(input: BirthInput): string {
+  return `${input.date.replace(/\D/g, '')}${input.time.replace(/\D/g, '').slice(0, 4)}`
+}
+
 export function BirthForm({ initialValue, onCalculate }: BirthFormProps) {
-  const [value, setValue] = useState(initialValue)
+  const [digits, setDigits] = useState(() => toDigits(initialValue))
+  const [calendar, setCalendar] = useState<NonNullable<BirthInput['calendar']>>(
+    initialValue.calendar ?? 'solar',
+  )
+  const [leapMonth, setLeapMonth] = useState(initialValue.leapMonth ?? false)
+  const [sex, setSex] = useState(initialValue.sex)
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    onCalculate(value)
+    if (!/^\d{12}$/.test(digits)) return
+
+    onCalculate({
+      calendar,
+      leapMonth: calendar === 'lunar' && leapMonth,
+      date: `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6, 8)}`,
+      time: `${digits.slice(8, 10)}:${digits.slice(10, 12)}`,
+      sex,
+    })
   }
 
   return (
     <form className="birth-form" onSubmit={submit}>
       <div className="form-heading">
-        <div>
-          <span className="eyebrow">BIRTH DATA</span>
-          <h2>출생 정보</h2>
-        </div>
-        <span className="required-note">양력 기준</span>
+        <h2>출생 정보</h2>
+        <span className="required-note">숫자 12자리</span>
       </div>
 
-      <label className="field field-wide">
-        <span>양력 생년월일</span>
-        <input
-          type="date"
-          value={value.date}
-          required
-          onChange={(event) => setValue((current) => ({ ...current, date: event.target.value }))}
-        />
-      </label>
+      <fieldset className="calendar-field">
+        <legend>달력 기준</legend>
+        <div className="segmented-control calendar-control">
+          <label>
+            <input
+              type="radio"
+              name="calendar"
+              value="solar"
+              checked={calendar === 'solar'}
+              onChange={() => setCalendar('solar')}
+            />
+            <span>양력</span>
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="calendar"
+              value="lunar"
+              checked={calendar === 'lunar'}
+              onChange={() => setCalendar('lunar')}
+            />
+            <span>음력</span>
+          </label>
+        </div>
+      </fieldset>
 
-      <label className="field">
-        <span>출생 시각</span>
+      <label className="field field-wide">
+        <span>생년월일시분 숫자 12자리</span>
         <input
-          type="time"
-          value={value.time}
+          className="birth-digits"
+          aria-label="생년월일시분 숫자 12자리"
+          type="text"
+          inputMode="numeric"
+          maxLength={12}
+          pattern="[0-9]{12}"
+          placeholder="198905130715"
+          autoComplete="bday"
+          value={digits}
           required
-          step="60"
-          onChange={(event) => setValue((current) => ({ ...current, time: event.target.value }))}
+          onChange={(event) => setDigits(event.target.value.replace(/\D/g, '').slice(0, 12))}
         />
+        <small className="input-guide">년 4자리 · 월 2자리 · 일 2자리 · 시 2자리 · 분 2자리</small>
       </label>
 
       <fieldset className="sex-field">
@@ -54,8 +91,8 @@ export function BirthForm({ initialValue, onCalculate }: BirthFormProps) {
               type="radio"
               name="sex"
               value="female"
-              checked={value.sex === 'female'}
-              onChange={() => setValue((current) => ({ ...current, sex: 'female' }))}
+              checked={sex === 'female'}
+              onChange={() => setSex('female')}
             />
             <span>여성</span>
           </label>
@@ -64,26 +101,27 @@ export function BirthForm({ initialValue, onCalculate }: BirthFormProps) {
               type="radio"
               name="sex"
               value="male"
-              checked={value.sex === 'male'}
-              onChange={() => setValue((current) => ({ ...current, sex: 'male' }))}
+              checked={sex === 'male'}
+              onChange={() => setSex('male')}
             />
             <span>남성</span>
           </label>
         </div>
       </fieldset>
 
-      <label className="field field-wide">
-        <span>표준 시간대</span>
-        <select
-          value={value.timeZone}
-          onChange={(event) => setValue((current) => ({ ...current, timeZone: event.target.value }))}
-        >
-          <option value="Asia/Seoul">대한민국 · Asia/Seoul</option>
-          <option value="Asia/Tokyo">일본 · Asia/Tokyo</option>
-          <option value="America/Los_Angeles">미국 서부 · Los Angeles</option>
-          <option value="Europe/London">영국 · London</option>
-        </select>
-      </label>
+      {calendar === 'lunar' ? (
+        <label className="leap-field">
+          <input
+            aria-label="윤달"
+            type="checkbox"
+            checked={leapMonth}
+            onChange={(event) => setLeapMonth(event.target.checked)}
+          />
+          <span><strong>윤달</strong><small>윤달 생일일 때만 선택</small></span>
+        </label>
+      ) : (
+        <p className="calendar-note">대한민국 표준시 기준</p>
+      )}
 
       <button className="calculate-button" type="submit">
         <span>만세력 계산</span>

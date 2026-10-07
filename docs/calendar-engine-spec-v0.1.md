@@ -1,4 +1,4 @@
-# 만세력 계산 엔진 규칙 명세서 v0.2.0-draft
+# 만세력 계산 엔진 규칙 명세서 v0.3.0-draft
 
 ## 1. 목적
 
@@ -67,7 +67,8 @@
 ```json
 {
   "calendar": "gregorian",
-  "localDateTime": "1989-05-13T07:15:00",
+  "date": "1989-05-13",
+  "time": "07:15:00",
   "timeZone": "Asia/Seoul",
   "sex": "female",
   "location": { "name": "서울", "longitude": 126.978 },
@@ -78,7 +79,8 @@
 
 ### 검증 규칙
 
-- `localDateTime`은 초까지 받을 수 있어야 한다.
+- `date`는 `YYYY-MM-DD` 형식으로 받는다.
+- `time`은 초까지 받을 수 있으며 생략할 수 있다. 생략하면 출생시각 미상으로 처리하고 임의의 시주를 생성하지 않는다.
 - 존재하지 않는 현지시각(DST gap)은 오류로 처리한다.
 - 중복되는 현지시각(DST overlap)은 오프셋 또는 fold 선택이 없으면 오류로 처리한다.
 - `sex`는 v1에서 `male` 또는 `female`이다. 순역 규칙을 적용할 수 없는 값은 명시적 오류로 처리한다.
@@ -91,7 +93,7 @@
 ```json
 {
   "profileId": "kr-traditional-v1-draft",
-  "profileVersion": "0.2.0",
+  "profileVersion": "0.3.0",
   "ephemeris": {
     "provider": "unlocked",
     "version": "unlocked"
@@ -100,6 +102,7 @@
     "localDateTime": "1989-05-13T07:15:00+09:00",
     "solarLocalDateTime": "1989-05-13T06:42:55+09:00",
     "longitudeCorrectionSeconds": -1925,
+    "timeKnown": true,
     "utc": "1989-05-12T22:15:00Z",
     "timeZone": "Asia/Seoul"
   },
@@ -186,6 +189,7 @@
 
 ### 8.4 시주
 
+- 출생시각이 없으면 시주를 생성하지 않으며 결과 원국은 연주·월주·일주 3개만 반환한다.
 - 시주 구간 판정에는 출생지 경도로 보정한 지방평균시를 사용한다.
 - 한국 표준자오선 135도보다 서쪽이면 시각을 빼고 동쪽이면 더한다.
 - 예: 서울 126.978도, `1986-04-02 15:25`는 `-32분 05초`를 적용해 약 `14:52:55`가 되므로 未시다.
@@ -267,6 +271,8 @@ luckDurationSeconds = elapsedSeconds * 120
 월말 클램프 규칙은 Java `LocalDateTime.plusYears().plusMonths()`와 같이 목표 월에 같은 일이 없으면 그 달의 마지막 날을 사용한다. 시간대가 DST 전환을 포함하면 달력 연산 후 지역 시간대 규칙을 다시 적용하며, gap/overlap 정책을 결과에 기록한다.
 
 `elapsedSeconds * 120`을 실제 출생 instant에 그대로 더하는 방식은 다른 결과를 내므로 기본 프로필에서 사용하지 않는다.
+
+출생시각이 없으면 현지 정오 `12:00`를 계산 기준으로 사용한다. 이때 기산기간과 첫 교운시점은 모두 추정값으로 표시하고 결과 경고에 해당 정책을 기록한다.
 
 ### 9.6 대운 간지
 

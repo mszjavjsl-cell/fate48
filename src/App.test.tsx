@@ -44,7 +44,7 @@ describe('Manse application', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    const digits = screen.getByLabelText('생년월일시분 숫자 12자리')
+    const digits = screen.getByLabelText('생년월일 또는 생년월일시분 숫자')
     expect(screen.getByLabelText('출생지')).toHaveValue('seoul')
     await user.clear(digits)
     await user.type(digits, '1986년04월02일 15:25')
@@ -63,13 +63,35 @@ describe('Manse application', () => {
     expect(within(screen.getByRole('group', { name: '출생정보' })).getByText('양력 1986년 4월 2일 15시 25분')).toBeInTheDocument()
   })
 
+  it('accepts yyyymmdd and renders a three-pillar chart without an hour pillar', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    const digits = screen.getByLabelText('생년월일 또는 생년월일시분 숫자')
+    await user.clear(digits)
+    await user.type(digits, '19860402')
+    await user.click(screen.getByLabelText('남성'))
+    await user.click(screen.getByRole('button', { name: '만세력 계산' }))
+
+    const board = screen.getByRole('group', { name: '사주 원국' })
+    expect(within(board).queryByRole('group', { name: /^시주/ })).not.toBeInTheDocument()
+    expect(within(board).getByRole('group', { name: '일주 丙子' })).toBeInTheDocument()
+    expect(within(board).getByRole('group', { name: '월주 辛卯' })).toBeInTheDocument()
+    expect(within(board).getByRole('group', { name: '연주 丙寅' })).toBeInTheDocument()
+    expect(screen.getByText('일 · 월 · 년')).toBeInTheDocument()
+    expect(within(screen.getByRole('group', { name: '출생정보' })).getByText('양력 1986년 4월 2일 · 출생시각 미상')).toBeInTheDocument()
+    expect(screen.getByText('미상 · 정오 기준 추정')).toBeInTheDocument()
+    expect(screen.queryByText('경도 보정')).not.toBeInTheDocument()
+    expect(screen.queryByText('보정 시각')).not.toBeInTheDocument()
+  })
+
   it('switches to lunar input and calculates from the converted solar date', async () => {
     const user = userEvent.setup()
     render(<App />)
 
     await user.click(screen.getByLabelText('음력'))
     expect(screen.getByLabelText('윤달')).toBeInTheDocument()
-    const digits = screen.getByLabelText('생년월일시분 숫자 12자리')
+    const digits = screen.getByLabelText('생년월일 또는 생년월일시분 숫자')
     await user.clear(digits)
     await user.type(digits, '198904090715')
     await user.click(screen.getByRole('button', { name: '만세력 계산' }))

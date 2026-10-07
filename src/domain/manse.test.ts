@@ -3,6 +3,21 @@ import { describe, expect, it } from 'vitest'
 import { calculateManse } from './manse'
 
 describe('calculateManse', () => {
+  it('omits the hour pillar when birth time is unknown', () => {
+    const result = calculateManse({
+      date: '1986-04-02',
+      sex: 'male',
+      location: { id: 'seoul', name: '서울', longitude: 126.978 },
+    })
+
+    expect(result.normalizedBirth.timeKnown).toBe(false)
+    expect(result.normalizedBirth.localDateTime).toContain('1986-04-02T12:00:00')
+    expect(result.normalizedBirth.longitudeCorrectionSeconds).toBeNull()
+    expect(result.normalizedBirth.solarLocalDateTime).toBeNull()
+    expect(result.pillars.map((item) => item.key)).toEqual(['year', 'month', 'day'])
+    expect(result.pillars.map((item) => item.pillar)).toEqual(['丙寅', '辛卯', '丙子'])
+  })
+
   it('calculates the four pillars and forward luck cycles for the 1989 female case', () => {
     const result = calculateManse({
       date: '1989-05-13',

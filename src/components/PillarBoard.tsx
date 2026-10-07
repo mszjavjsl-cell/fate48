@@ -9,10 +9,10 @@ export function PillarBoard({ pillars }: PillarBoardProps) {
     <section className="pillar-section" aria-labelledby="pillars-title">
       <div className="section-heading compact">
         <h2 id="pillars-title">사주 원국</h2>
-        <span className="reading-order">시 · 일 · 월 · 년</span>
+        <span className="reading-order">{pillars.length === 4 ? '시 · 일 · 월 · 년' : '일 · 월 · 년'}</span>
       </div>
 
-      <div className="pillar-board" role="group" aria-label="사주 원국">
+      <div className="pillar-board" data-pillar-count={pillars.length} role="group" aria-label="사주 원국">
         {pillars.toReversed().map((pillar) => (
           <article
             className="pillar-column"
